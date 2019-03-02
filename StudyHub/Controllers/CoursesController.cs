@@ -63,7 +63,7 @@ namespace StudyHub.Controllers
 
             try
             {
-                var createdCourse = courseManager.CreateCourse(userId, course);
+                var createdCourse = courseManager.CreateCourse(course);
                 return Ok(createdCourse);
             }
             catch(CustomDbException e)

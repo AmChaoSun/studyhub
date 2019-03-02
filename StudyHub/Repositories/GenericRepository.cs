@@ -14,7 +14,7 @@ namespace StudyHub.Repositories
             this.context = context;
         }
 
-        public DbSet<T> Records
+        public virtual DbSet<T> Records
         {
             get
             {
@@ -22,7 +22,7 @@ namespace StudyHub.Repositories
             }
         }
 
-        public T Add(T record)
+        public virtual T Add(T record)
         {
             context.Add(record);
             context.SaveChanges();
@@ -30,23 +30,23 @@ namespace StudyHub.Repositories
 
         }
 
-        public void Delete(T record)
+        public virtual void Delete(T record)
         {
             context.Remove(record);
             context.SaveChanges();
         }
 
-        public IEnumerable<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
             return Records;
         }
 
-        public T GetById(int id)
+        public virtual T GetById(int id)
         {
             return Records.Find(id);
         }
 
-        public T Update(T record)
+        public virtual T Update(T record)
         {
             context.Attach(record);
             context.Entry(record).State = EntityState.Modified;

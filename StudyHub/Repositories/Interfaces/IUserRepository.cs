@@ -6,6 +6,6 @@ namespace StudyHub.Repositories.Interfaces
 {
     public interface IUserRepository : IGenericRepository<User>
     {
-        User BasicInfoUpdate(User user, UserUpdateDto info);
+        User UpdateBasicInfo(User user, UserUpdateDto info);
     }
 }

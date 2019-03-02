@@ -41,7 +41,7 @@ namespace StudyHub.Managers
                 throw new CustomDbException("User not Found");
             }
 
-            var updatedUser = userRepository.BasicInfoUpdate(user, info);
+            var updatedUser = userRepository.UpdateBasicInfo(user, info);
             //data transform
             var displayUser = mapper.Map<User, UserDisplayDto>(user);
             return displayUser;

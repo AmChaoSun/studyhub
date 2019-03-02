@@ -8,7 +8,14 @@ namespace StudyHub.Models
     {
         public MappingProfile()
         {
+            //user
             CreateMap<User, UserDisplayDto>();
+
+            //course
+            CreateMap<CourseRegisterDto, Course>()
+                .ForMember(d => d.CreatedOn,
+                    o => o.MapFrom(src => DateTime.Now));
+            CreateMap<Course, CourseDisplayDto>();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace StudyHub.Repositories
 
         }
 
-        public User BasicInfoUpdate(User user, UserUpdateDto info)
+        public User UpdateBasicInfo(User user, UserUpdateDto info)
         {
             var entry = context.Entry(user);
             entry.CurrentValues.SetValues(info);
