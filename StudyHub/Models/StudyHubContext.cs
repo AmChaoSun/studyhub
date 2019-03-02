@@ -37,6 +37,10 @@ namespace StudyHub.Models
             {
                 entity.ToTable("Course");
 
+                entity.HasIndex(e => e.Name)
+                    .HasName("Course_Name_key")
+                    .IsUnique();
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100)
