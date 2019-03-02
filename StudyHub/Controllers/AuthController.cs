@@ -26,6 +26,12 @@ namespace StudyHub.Controllers
         [HttpPost("insite_token")]
         public IActionResult InsiteAuth(UserLoginDto user)
         {
+            //Model validation
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             return Ok(authManager.GetInsiteToken(user));
         }
 

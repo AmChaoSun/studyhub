@@ -14,38 +14,12 @@ namespace StudyHub.Controllers
     [Authorize]
     public class TestsController : ControllerBase
     {
-        // GET: api/tests
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/tests/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/tests
         [HttpPost]
         public IActionResult Post([FromBody]string value)
         {
 
             return Ok();
-        }
-
-        // PUT api/tests/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/tests/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
