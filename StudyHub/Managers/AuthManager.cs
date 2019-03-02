@@ -1,6 +1,10 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using StudyHub.Managers.Interfaces;
 using StudyHub.Models;
 using StudyHub.Models.Dtos;
@@ -12,16 +16,39 @@ namespace StudyHub.Managers
     public class AuthManager : IAuthManager
     {
         private readonly IAuthRepository authRepository;
-        private readonly HashHelper hashHelper;
         private readonly IMapper mapper;
+        private readonly IConfiguration configuration;
         //constructor, DIs
-        public AuthManager(IAuthRepository authRepository, 
+        public AuthManager(IAuthRepository authRepository,
             IConfiguration configuration,
             IMapper mapper)
         {
             this.authRepository = authRepository;
             this.mapper = mapper;
-            hashHelper = new HashHelper(configuration);
+            this.configuration = configuration;
+        }
+
+        public string GetInsiteToken(UserLoginDto user)
+        {
+            user.Credential = new HashHelper(configuration).GetHashedData(user.Credential);
+            var userAuth = new UserAuthDto();
+            
+            //select authentication method
+            switch (user.IdentityType)
+            {
+                case "email": 
+                    userAuth = authRepository.GetUserIdByEmail(user);
+                    break;
+                default: break;
+            }
+
+            //if not found
+            if (userAuth == null)
+            {
+                return null;
+            }
+
+            return BuildToken(userAuth);
         }
 
         public UserDisplayDto RegisterEmailUser(UserEmailRegisterDto info)
@@ -35,7 +62,7 @@ namespace StudyHub.Managers
             { 
                 IdentityType = "email",
                 Identifier = info.Identifier, 
-                Credential = hashHelper.GetHashedData(info.Credential), 
+                Credential = new HashHelper(configuration).GetHashedData(info.Credential), 
                 InSite = true 
             };
 
@@ -47,6 +74,32 @@ namespace StudyHub.Managers
             }
             var displayUser = mapper.Map<User, UserDisplayDto>(newUser);
             return displayUser;
+        }
+
+        //token generator
+        private string BuildToken(UserAuthDto auth)
+        {
+            //get secret key
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            //add claims
+            var claims = new Claim[]
+                {
+                    new Claim("UserId", auth.UserId.ToString())
+                };
+
+            //generate token
+            var token = new JwtSecurityToken
+            (
+                issuer: configuration["Jwt:Issuer"],
+                audience: configuration["Jwt:Issuer"],
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: creds,
+                claims:claims
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

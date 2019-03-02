@@ -23,9 +23,9 @@ namespace StudyHub.Controllers
         }
         // POST api/auth/insite_token
         [HttpPost("insite_token")]
-        public IActionResult InsiteAuth()
+        public IActionResult InsiteAuth(UserLoginDto user)
         {
-            return Ok();
+            return Ok(authManager.GetInsiteToken(user));
         }
 
         // POST api/auth/emails

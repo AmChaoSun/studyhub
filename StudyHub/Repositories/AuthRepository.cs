@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using StudyHub.Models;
+using StudyHub.Models.Dtos;
 using StudyHub.Repositories.Interfaces;
 
 namespace StudyHub.Repositories
@@ -25,6 +26,20 @@ namespace StudyHub.Repositories
             Records.Add(auth);
             context.SaveChanges();
             return user;
+        }
+
+        public UserAuthDto GetUserIdByEmail(UserLoginDto user)
+        {
+            var auth = Records
+                .Where(x => x.IdentityType == "email"
+                    && x.Identifier == user.Identifier
+                    && x.Credential == user.Credential)
+                .FirstOrDefault();
+            if(auth == null)
+            {
+                return null;
+            }
+            return new UserAuthDto { UserId = auth.UserId};
         }
     }
 }

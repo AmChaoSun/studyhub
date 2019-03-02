@@ -7,5 +7,6 @@ namespace StudyHub.Managers.Interfaces
     public interface IAuthManager
     {
         UserDisplayDto RegisterEmailUser(UserEmailRegisterDto info);
+        string GetInsiteToken(UserLoginDto user);
     }
 }
