@@ -83,6 +83,10 @@ namespace StudyHub.Models
             {
                 entity.ToTable("UserAuth");
 
+                entity.HasIndex(e => e.Identifier)
+                    .HasName("UserAuth_Identifier_key")
+                    .IsUnique();
+
                 entity.Property(e => e.Credential)
                     .IsRequired()
                     .HasMaxLength(500)

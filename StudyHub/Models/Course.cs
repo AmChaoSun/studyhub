@@ -14,6 +14,7 @@ namespace StudyHub.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public int? PublisherId { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         public virtual User Publisher { get; set; }
         public virtual ICollection<Enroll> Enrolls { get; set; }

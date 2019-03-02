@@ -10,6 +10,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using StudyHub.Managers;
+using StudyHub.Managers.Interfaces;
+using StudyHub.Models;
+using StudyHub.Repositories;
+using StudyHub.Repositories.Interfaces;
 
 namespace StudyHub
 {
@@ -25,7 +30,26 @@ namespace StudyHub
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //interfaces DIs
+            services.AddScoped<IAuthManager, AuthManager>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<StudyHubContext, StudyHubContext>();
+
+            //automapper config
+            var mapConfig = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new MappingProfile());
+            });
+            var mapper = mapConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            //mvc middleware
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

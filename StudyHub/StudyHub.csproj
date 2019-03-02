@@ -10,6 +10,15 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Bricelam.EntityFrameworkCore.Pluralizer" Version="1.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Utils\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Managers\" />
+    <Folder Include="Repositories\Interfaces\" />
+    <Folder Include="Managers\Interfaces\" />
+    <Folder Include="Models\Dtos\" />
+  </ItemGroup>
 </Project>

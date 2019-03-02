@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using StudyHub.Utils;
 
 namespace StudyHub.Controllers
 {
@@ -11,9 +13,18 @@ namespace StudyHub.Controllers
     public class ValuesController : ControllerBase
     {
         // GET api/values
+        private readonly HashHelper hashHelper;
+
+        public ValuesController(IConfiguration configuration)
+        {
+            hashHelper = new HashHelper(configuration);
+        }
+
+
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            var a = hashHelper.GetHashedData("123");
             return new string[] { "value1", "value2" };
         }
 
