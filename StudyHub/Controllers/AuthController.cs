@@ -21,6 +21,7 @@ namespace StudyHub.Controllers
         {
             this.authManager = authManager;
         }
+
         // POST api/auth/insite_token
         [HttpPost("insite_token")]
         public IActionResult InsiteAuth(UserLoginDto user)
