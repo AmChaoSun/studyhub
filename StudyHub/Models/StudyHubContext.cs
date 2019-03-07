@@ -15,10 +15,12 @@ namespace StudyHub.Models
         {
         }
 
+        public virtual DbSet<AdminUser> AdminUsers { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Enroll> Enrolls { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<UserAuth> UserAuths { get; set; }
+        public virtual DbSet<UserLoginAuth> UserLoginAuths { get; set; }
+        public virtual DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -32,6 +34,26 @@ namespace StudyHub.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.1-servicing-10028");
+
+            modelBuilder.Entity<AdminUser>(entity =>
+            {
+                entity.HasKey(e => e.AdminId)
+                    .HasName("AdminUser_pkey");
+
+                entity.ToTable("AdminUser");
+
+                entity.HasIndex(e => e.UserName)
+                    .HasName("AdminUser_UserName_key")
+                    .IsUnique();
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.Role).HasDefaultValueSql("2");
+
+                entity.Property(e => e.UserName).HasMaxLength(100);
+            });
 
             modelBuilder.Entity<Course>(entity =>
             {
@@ -80,16 +102,22 @@ namespace StudyHub.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.Role).HasDefaultValueSql("'0'::smallint");
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("User_RoleId_fkey");
             });
 
-            modelBuilder.Entity<UserAuth>(entity =>
+            modelBuilder.Entity<UserLoginAuth>(entity =>
             {
-                entity.ToTable("UserAuth");
+                entity.ToTable("UserLoginAuth");
 
                 entity.HasIndex(e => e.Identifier)
                     .HasName("UserAuth_Identifier_key")
                     .IsUnique();
+
+                entity.Property(e => e.Id).HasDefaultValueSql("nextval('\"UserAuth_Id_seq\"'::regclass)");
 
                 entity.Property(e => e.Credential)
                     .IsRequired()
@@ -109,10 +137,27 @@ namespace StudyHub.Models
                 entity.Property(e => e.InSite).ForNpgsqlHasComment("in site or 3rd party");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserAuths)
+                    .WithMany(p => p.UserLoginAuths)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("UserAuth_UserId_fkey");
             });
+
+            modelBuilder.Entity<UserRole>(entity =>
+            {
+                entity.ToTable("UserRole");
+
+                entity.HasIndex(e => e.Role)
+                    .HasName("UserRole_Role_key")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Role)
+                    .IsRequired()
+                    .HasMaxLength(100);
+            });
+
+            modelBuilder.HasSequence<int>("UserAuth_Id_seq");
         }
     }
 }

@@ -9,17 +9,18 @@ namespace StudyHub.Models
         {
             Courses = new HashSet<Course>();
             Enrolls = new HashSet<Enroll>();
-            UserAuths = new HashSet<UserAuth>();
+            UserLoginAuths = new HashSet<UserLoginAuth>();
         }
 
         public int Id { get; set; }
         public string NickName { get; set; }
         public bool IsActive { get; set; }
-        public short Role { get; set; }
+        public int RoleId { get; set; }
         public DateTime CreatedOn { get; set; }
 
+        public virtual UserRole Role { get; set; }
         public virtual ICollection<Course> Courses { get; set; }
         public virtual ICollection<Enroll> Enrolls { get; set; }
-        public virtual ICollection<UserAuth> UserAuths { get; set; }
+        public virtual ICollection<UserLoginAuth> UserLoginAuths { get; set; }
     }
 }
