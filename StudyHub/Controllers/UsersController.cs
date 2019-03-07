@@ -28,7 +28,7 @@ namespace StudyHub.Controllers
         public IActionResult GetUser(int id)
         {
             //authorization
-            var userId = Int32.Parse(User.FindFirst("UserId").Value);
+            var userId = Int32.Parse(User.FindFirst("userId").Value);
             if (!(userId == id))
             {
                 return Forbid();
@@ -51,7 +51,7 @@ namespace StudyHub.Controllers
         public IActionResult UpdateUser(int id, UserUpdateDto info)
         {
             //authorization
-            var userId = Int32.Parse(User.FindFirst("UserId").Value);
+            var userId = Int32.Parse(User.FindFirst("userId").Value);
             if (!(userId == id))
             {
                 return Forbid();

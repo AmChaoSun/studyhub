@@ -36,13 +36,13 @@ namespace StudyHub.Controllers
 
         // GET api/courses/5
         // Get course by id
-        [HttpGet("{id}")]
+        [HttpGet("{courseId}")]
         [AllowAnonymous]
-        public IActionResult GetCourseById(int id)
+        public IActionResult GetCourseById(int courseId)
         {
             try 
             { 
-                var course = courseManager.GetCourseById(id);
+                var course = courseManager.GetCourseById(courseId);
                 return Ok(course);
             }
             catch(CustomDbException e) 
@@ -56,7 +56,7 @@ namespace StudyHub.Controllers
         [HttpPost]
         public IActionResult CreateCourse(CourseRegisterDto course)
         {
-            var userId = Int32.Parse(User.FindFirst("UserId").Value);
+            var userId = Int32.Parse(User.FindFirst("userId").Value);
 
             //assign publisherId
             course.PublisherId = userId;
@@ -74,17 +74,17 @@ namespace StudyHub.Controllers
 
         // PUT api/courses/5
         // Update a course
-        [HttpPut("{id}")]
-        public IActionResult UpdateCourse(int id, CourseUpdateDto info)
+        [HttpPut("{courseId}")]
+        public IActionResult UpdateCourse(int courseId, CourseUpdateDto info)
         {
-            var userId = Int32.Parse(User.FindFirst("UserId").Value);
+            var userId = Int32.Parse(User.FindFirst("userId").Value);
 
             //assign publisherId
             info.PublisherId = userId;
 
             try
             {
-                var course = courseManager.UpdateCourse(id, info);
+                var course = courseManager.UpdateCourse(courseId, info);
                 return Ok(course);
             }
             catch (CustomDbException e)
@@ -96,14 +96,14 @@ namespace StudyHub.Controllers
 
         // DELETE api/courses/5
         // Delete a course
-        [HttpDelete("{id}")]
-        public IActionResult DeleteCourse(int id)
+        [HttpDelete("{courseId}")]
+        public IActionResult DeleteCourse(int courseId)
         {
-            var userId = Int32.Parse(User.FindFirst("UserId").Value);
+            var userId = Int32.Parse(User.FindFirst("userId").Value);
 
             try
             {
-                courseManager.DeleteCourse(id, userId);
+                courseManager.DeleteCourse(courseId, userId);
                 return Ok();
             }
             catch (CustomDbException e)
@@ -112,14 +112,14 @@ namespace StudyHub.Controllers
             }
         }
 
-        [HttpGet("{id}/students")]
-        public IActionResult GetStudentsByCourse(int id) 
+        [HttpGet("{courseId}/enrolls")]
+        public IActionResult GetEnrolledStudents(int courseId) 
         {
-            var userId = Int32.Parse(User.FindFirst("UserId").Value);
+            var userId = Int32.Parse(User.FindFirst("userId").Value);
 
             try
             {
-                var students = courseManager.GetStudentsByCourse(id, userId);
+                var students = courseManager.GetEnrolledStudents(courseId, userId);
                 return Ok(students);
             }
             catch (CustomDbException e)

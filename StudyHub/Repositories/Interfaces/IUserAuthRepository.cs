@@ -4,9 +4,9 @@ using StudyHub.Models.Dtos;
 
 namespace StudyHub.Repositories.Interfaces
 {
-    public interface IAuthRepository : IGenericRepository<UserAuth>
+    public interface IUserAuthRepository : IGenericRepository<UserLoginAuth>
     {
-        User EmailRegister(User user, UserAuth auth);
+        User EmailRegister(User user, UserLoginAuth auth);
         UserAuthDto GetUserIdByEmail(UserLoginDto user);
     }
 }

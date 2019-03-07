@@ -15,11 +15,11 @@ namespace StudyHub.Managers
 {
     public class AuthManager : IAuthManager
     {
-        private readonly IAuthRepository authRepository;
+        private readonly IUserAuthRepository authRepository;
         private readonly IMapper mapper;
         private readonly IConfiguration configuration;
         //constructor, DIs
-        public AuthManager(IAuthRepository authRepository,
+        public AuthManager(IUserAuthRepository authRepository,
             IConfiguration configuration,
             IMapper mapper)
         {
@@ -53,12 +53,13 @@ namespace StudyHub.Managers
 
         public UserDisplayDto RegisterEmailUser(UserEmailRegisterDto info)
         {
-            var user = new User 
-            { 
-                NickName = info.NickName, 
+            var user = new User
+            {
+                NickName = info.NickName,
+                RoleId = 2, 
                 CreatedOn = DateTime.Now 
             };
-            var auth = new UserAuth 
+            var auth = new UserLoginAuth 
             { 
                 IdentityType = "email",
                 Identifier = info.Identifier, 
@@ -86,7 +87,8 @@ namespace StudyHub.Managers
             //add claims
             var claims = new Claim[]
                 {
-                    new Claim("UserId", auth.UserId.ToString())
+                    new Claim("userId", auth.UserId.ToString()),
+                    new Claim("roles", auth.Role)
                 };
 
             //generate token

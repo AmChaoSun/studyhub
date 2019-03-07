@@ -7,10 +7,10 @@ namespace StudyHub.Managers.Interfaces
 {
     public interface ICourseManager
     {
-        CourseDisplayDto GetCourseById(int id);
+        CourseDisplayDto GetCourseById(int courseId);
         CourseDisplayDto CreateCourse(CourseRegisterDto course);
-        CourseDisplayDto UpdateCourse(int id, CourseUpdateDto info);
-        void DeleteCourse(int id, int userId);
-        IEnumerable<UserDisplayDto> GetStudentsByCourse(int id, int userId);
+        CourseDisplayDto UpdateCourse(int courseId, CourseUpdateDto info);
+        void DeleteCourse(int coureId, int userId);
+        IEnumerable<UserDisplayDto> GetEnrolledStudents(int courseId, int userId);
     }
 }

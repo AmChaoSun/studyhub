@@ -15,6 +15,7 @@ namespace StudyHub.Models
         {
         }
 
+        public virtual DbSet<AdminRole> AdminRoles { get; set; }
         public virtual DbSet<AdminUser> AdminUsers { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Enroll> Enrolls { get; set; }
@@ -35,6 +36,22 @@ namespace StudyHub.Models
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.1-servicing-10028");
 
+            modelBuilder.Entity<AdminRole>(entity =>
+            {
+                entity.HasKey(e => e.RoleId)
+                    .HasName("AdminRole_pkey");
+
+                entity.ToTable("AdminRole");
+
+                entity.HasIndex(e => e.Name)
+                    .HasName("AdminRole_Name_key")
+                    .IsUnique();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(100);
+            });
+
             modelBuilder.Entity<AdminUser>(entity =>
             {
                 entity.HasKey(e => e.AdminId)
@@ -50,9 +67,15 @@ namespace StudyHub.Models
                     .IsRequired()
                     .HasMaxLength(500);
 
-                entity.Property(e => e.Role).HasDefaultValueSql("2");
+                entity.Property(e => e.RoleId).HasDefaultValueSql("2");
 
                 entity.Property(e => e.UserName).HasMaxLength(100);
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AdminUsers)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("AdminUser_Role_fkey");
             });
 
             modelBuilder.Entity<Course>(entity =>
@@ -63,6 +86,8 @@ namespace StudyHub.Models
                     .HasName("Course_Name_key")
                     .IsUnique();
 
+                entity.Property(e => e.CourseId).HasDefaultValueSql("nextval('\"Course_Id_seq\"'::regclass)");
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100)
@@ -71,7 +96,6 @@ namespace StudyHub.Models
                 entity.HasOne(d => d.Publisher)
                     .WithMany(p => p.Courses)
                     .HasForeignKey(d => d.PublisherId)
-                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("Course_PublisherId_fkey");
             });
 
@@ -79,18 +103,16 @@ namespace StudyHub.Models
             {
                 entity.ToTable("Enroll");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.EnrollId).HasDefaultValueSql("nextval('\"Enroll_id_seq\"'::regclass)");
 
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.Enrolls)
                     .HasForeignKey(d => d.CourseId)
-                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("Enroll_CourseId_fkey");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Enrolls)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("Enroll_UserId_fkey");
             });
 
@@ -101,6 +123,8 @@ namespace StudyHub.Models
                 entity.Property(e => e.NickName)
                     .IsRequired()
                     .HasMaxLength(100);
+
+                entity.Property(e => e.RoleId).HasDefaultValueSql("2");
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Users)
@@ -144,20 +168,29 @@ namespace StudyHub.Models
 
             modelBuilder.Entity<UserRole>(entity =>
             {
+                entity.HasKey(e => e.RoleId)
+                    .HasName("UserRole_pkey");
+
                 entity.ToTable("UserRole");
 
-                entity.HasIndex(e => e.Role)
+                entity.HasIndex(e => e.Name)
                     .HasName("UserRole_Role_key")
                     .IsUnique();
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.RoleId).HasDefaultValueSql("nextval('\"UserRole_id_seq\"'::regclass)");
 
-                entity.Property(e => e.Role)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100);
             });
 
+            modelBuilder.HasSequence<int>("Course_Id_seq");
+
+            modelBuilder.HasSequence<int>("Enroll_id_seq");
+
             modelBuilder.HasSequence<int>("UserAuth_Id_seq");
+
+            modelBuilder.HasSequence<int>("UserRole_id_seq");
         }
     }
 }

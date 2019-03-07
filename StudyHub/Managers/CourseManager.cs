@@ -34,10 +34,10 @@ namespace StudyHub.Managers
             return displayCourse;
         }
 
-        public void DeleteCourse(int id, int userId)
+        public void DeleteCourse(int courseId, int userId)
         {
             var course = courseRepository.Records
-                .Where(x => x.Id == id && x.PublisherId == userId)
+                .Where(x => x.CourseId == courseId && x.PublisherId == userId)
                 .FirstOrDefault();
             if(course == null)
             {
@@ -46,9 +46,9 @@ namespace StudyHub.Managers
             courseRepository.Delete(course);
         }
 
-        public CourseDisplayDto GetCourseById(int id)
+        public CourseDisplayDto GetCourseById(int courseId)
         {
-            var course = courseRepository.GetById(id);
+            var course = courseRepository.GetById(courseId);
             if(course == null)
             {
                 throw new CustomDbException("Course not Found");
@@ -58,26 +58,26 @@ namespace StudyHub.Managers
             return displayCourse;
         }
 
-        public IEnumerable<UserDisplayDto> GetStudentsByCourse(int id, int userId)
+        public IEnumerable<UserDisplayDto> GetEnrolledStudents(int courseId, int userId)
         {
             var course = courseRepository.Records
-                .Where(x => x.Id == id && x.PublisherId == userId)
+                .Where(x => x.CourseId == courseId && x.PublisherId == userId)
                 .FirstOrDefault();
             if (course == null)
             {
                 throw new CustomDbException("Invalid request");
             }
-            var students = courseRepository.GetStudentsByCourse(course);
+            var students = courseRepository.GetEnrolledStudents(course);
             var displayStudents = mapper.Map<IEnumerable<User>,
                                     IEnumerable<UserDisplayDto>>(students);
             return displayStudents;
 
         }
 
-        public CourseDisplayDto UpdateCourse(int id, CourseUpdateDto info)
+        public CourseDisplayDto UpdateCourse(int courseId, CourseUpdateDto info)
         {
             var course = courseRepository.Records
-                .Where(x => x.Id == id && x.PublisherId == info.PublisherId)
+                .Where(x => x.CourseId == courseId && x.PublisherId == info.PublisherId)
                 .FirstOrDefault();
             if (course == null)
             {

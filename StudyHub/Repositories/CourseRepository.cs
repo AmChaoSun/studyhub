@@ -23,13 +23,14 @@ namespace StudyHub.Repositories
             return base.Add(record);
         }
 
-        public IEnumerable<User> GetStudentsByCourse(Course course)
+        public IEnumerable<User> GetEnrolledStudents(Course course)
         {
             var students = course.Enrolls
                 .Join(context.Users,
                             e => e.UserId,
                             u => u.Id,
                             (e, u) => u);
+                //.ToList();
             return students;
         }
 

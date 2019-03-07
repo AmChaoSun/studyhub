@@ -32,7 +32,13 @@ namespace StudyHub.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(authManager.GetInsiteToken(user));
+            var token = authManager.GetInsiteToken(user);
+            if(token == null)
+            {
+                return BadRequest("Wrong login info.");
+            }
+
+            return Ok(token);
         }
 
         // POST api/auth/emails
@@ -47,7 +53,10 @@ namespace StudyHub.Controllers
 
             //try register
             var newUser = authManager.RegisterEmailUser(info);
-
+            if(newUser == null)
+            {
+                return BadRequest("Registered user.");
+            }
             //return
             return Ok(newUser);
         }

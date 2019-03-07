@@ -36,7 +36,9 @@ namespace StudyHub
         {
             //interfaces DIs
             services.AddScoped<IAuthManager, AuthManager>();
-            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IUserAuthRepository, AuthRepository>();
+            services.AddScoped<IAdminManager, AdminManager>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<StudyHubContext, StudyHubContext>();
 
             //automapper config
@@ -47,7 +49,7 @@ namespace StudyHub
             var mapper = mapConfig.CreateMapper();
             services.AddSingleton(mapper);
 
-            //add authentication
+            //add jwt authentication
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -63,6 +65,11 @@ namespace StudyHub
                     };
                 });
 
+            //add authorization policies
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => policy.RequireClaim("AdminId"));
+            });
 
 
             //mvc middleware
