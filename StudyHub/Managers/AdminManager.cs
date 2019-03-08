@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
@@ -46,6 +48,33 @@ namespace StudyHub.Managers.Interfaces
 
             //build token
             return BuildToken(adminUser);
+        }
+
+        public UserSearchResultDto SearchUsers(UserSearchAttribute info)
+        {
+            var users = repo.SearchUsers(info);
+            if (info.PageNumber == 0)
+            {
+                info.PageNumber = 1;
+            }
+            if (info.PageSize == 0)
+            {
+                info.PageSize = 10;
+            }
+
+            var result = new UserSearchResultDto
+            {
+                PageSize = info.PageSize,
+                TotalPage = users.Count() / info.PageSize
+                    + users.Count() % info.PageSize == 0 ? 0 : 1
+            };
+            result.PageNumber = info.PageNumber > result.TotalPage ?
+                                                1 : info.PageNumber;
+            users = users.Skip(result.PageSize * (result.PageNumber - 1))
+                        .Take(result.PageSize);
+            result.Users = mapper.Map<IEnumerable<User>,
+                IEnumerable<UserDisplayDto>>(users);
+            return result;
         }
 
         //token generator

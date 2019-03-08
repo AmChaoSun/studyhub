@@ -45,5 +45,47 @@ namespace StudyHub.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpGet("users")]
+        public IActionResult SearchUsers(string sortString = "id",
+                                        string sortOrder = "ascend",
+                                        string searchValue = "",
+                                        string role = null,
+                                        int pageSize = 10,
+                                        int pageNumber = 1)
+        {
+            //assign search values
+            var searchInfo = new UserSearchAttribute
+            {
+                SortString = sortString,
+                SortOrder = sortOrder,
+                SearchValue = searchValue,
+                Role = role,
+                PageSize = pageSize,
+                PageNumber = pageNumber
+            };
+
+            var result = adminManager.SearchUsers(searchInfo);
+
+            return Ok(result);
+        }
+
+        //[HttpPost("users")]
+        //public IActionResult CreateUser()
+        //{
+
+        //}
+
+        //[HttpPut("users/{id}")]
+        //public IActionResult UpdateUser()
+        //{
+
+        //}
+
+        //[HttpDelete("users/{id}")]
+        //public IActionResult DeleteUser()
+        //{
+
+        //}
     }
 }

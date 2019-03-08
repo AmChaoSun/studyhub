@@ -17,6 +17,8 @@ namespace StudyHub.Models
         public bool IsActive { get; set; }
         public int RoleId { get; set; }
         public DateTime CreatedOn { get; set; }
+        public string Email { get; set; }
+        public string Mobile { get; set; }
 
         public virtual UserRole Role { get; set; }
         public virtual ICollection<Course> Courses { get; set; }

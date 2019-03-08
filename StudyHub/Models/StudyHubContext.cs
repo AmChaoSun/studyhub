@@ -120,6 +120,22 @@ namespace StudyHub.Models
             {
                 entity.ToTable("User");
 
+                entity.HasIndex(e => e.Email)
+                    .HasName("User_Email_key")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Mobile)
+                    .HasName("User_Mobile_key")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.NickName)
+                    .HasName("User_NickName_key")
+                    .IsUnique();
+
+                entity.Property(e => e.Email).HasMaxLength(100);
+
+                entity.Property(e => e.Mobile).HasMaxLength(30);
+
                 entity.Property(e => e.NickName)
                     .IsRequired()
                     .HasMaxLength(100);
@@ -156,7 +172,7 @@ namespace StudyHub.Models
                 entity.Property(e => e.IdentityType)
                     .IsRequired()
                     .HasMaxLength(50)
-                    .ForNpgsqlHasComment("such as email, phone, facebook");
+                    .ForNpgsqlHasComment("such as email, mobile, facebook");
 
                 entity.Property(e => e.InSite).ForNpgsqlHasComment("in site or 3rd party");
 

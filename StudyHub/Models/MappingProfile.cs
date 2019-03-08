@@ -9,7 +9,9 @@ namespace StudyHub.Models
         public MappingProfile()
         {
             //user
-            CreateMap<User, UserDisplayDto>();
+            CreateMap<User, UserDisplayDto>()
+                .ForMember(d => d.Role,
+                    o => o.MapFrom(src => src.Role.Name));
 
             //course
             CreateMap<CourseRegisterDto, Course>()
