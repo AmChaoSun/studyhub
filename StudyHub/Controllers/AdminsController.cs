@@ -70,11 +70,24 @@ namespace StudyHub.Controllers
             return Ok(result);
         }
 
-        //[HttpPost("users")]
-        //public IActionResult CreateUser()
-        //{
+        [HttpPost("users")]
+        public IActionResult RegisterUser(UserRegisterDto info)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var user = adminManager.RegisterUser(info);
+                return Ok(user);
+            }
+            catch(CustomDbException e)
+            {
+                return BadRequest(e.Message);
+            }
 
-        //}
+        }
 
         //[HttpPut("users/{id}")]
         //public IActionResult UpdateUser()

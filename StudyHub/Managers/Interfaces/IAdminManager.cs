@@ -7,5 +7,6 @@ namespace StudyHub.Managers.Interfaces
     {
         string GetToken(AdminLoginDto loginInfo);
         UserSearchResultDto SearchUsers(UserSearchAttribute info);
+        UserDisplayDto RegisterUser(UserRegisterDto info);
     }
 }

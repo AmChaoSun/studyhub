@@ -29,6 +29,13 @@ namespace StudyHub.Managers.Interfaces
             this.configuration = configuration;
         }
 
+        public UserDisplayDto RegisterUser(UserRegisterDto info)
+        {
+            var user = repo.RegisterUser(info);
+            var displayUser = mapper.Map<User, UserDisplayDto>(user);
+            return displayUser;
+        }
+
         public string GetToken(AdminLoginDto loginInfo)
         {
             var adminUser = repo.FindUser(loginInfo.UserName);

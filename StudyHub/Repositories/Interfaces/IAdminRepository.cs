@@ -9,5 +9,6 @@ namespace StudyHub.Repositories.Interfaces
     {
         AdminUser FindUser(string userName);
         IEnumerable<User> SearchUsers(UserSearchAttribute info);
+        User RegisterUser(UserRegisterDto info);
     }
 }
