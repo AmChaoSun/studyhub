@@ -9,5 +9,7 @@ namespace StudyHub.Repositories.Interfaces
     {
         Course UpdateBasicInfo(Course course, CourseUpdateDto info);
         IEnumerable<User> GetEnrolledStudents(Course course);
+        Course AdminGetCourseById(int courseId);
+        Course RegisterCourse(CourseRegisterDto info);
     }
 }

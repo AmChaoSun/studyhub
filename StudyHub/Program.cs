@@ -19,6 +19,9 @@ namespace StudyHub
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration(config => {
+                config.AddJsonFile($"appsettings.json", optional: true, reloadOnChange: true);
+            })
                 .UseStartup<Startup>();
     }
 }

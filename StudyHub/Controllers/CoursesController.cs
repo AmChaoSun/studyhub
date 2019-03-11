@@ -13,7 +13,6 @@ using StudyHub.Utils;
 
 namespace StudyHub.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
     public class CoursesController : ControllerBase
@@ -28,6 +27,7 @@ namespace StudyHub.Controllers
         // GET: api/courses
         // Get courses list(search)
         [HttpGet]
+        [Route("api/courses")]
         [AllowAnonymous]
         public IActionResult GetCourses()
         {
@@ -36,7 +36,9 @@ namespace StudyHub.Controllers
 
         // GET api/courses/5
         // Get course by id
-        [HttpGet("{courseId}")]
+
+        [HttpGet]
+        [Route("api/courses/{courseId}")]
         [AllowAnonymous]
         public IActionResult GetCourseById(int courseId)
         {
@@ -54,12 +56,16 @@ namespace StudyHub.Controllers
         // POST api/courses
         // Post a course
         [HttpPost]
+        [Route("api/courses")]
         public IActionResult CreateCourse(CourseRegisterDto course)
         {
             var userId = Int32.Parse(User.FindFirst("userId").Value);
 
             //assign publisherId
-            course.PublisherId = userId;
+            if(userId != course.PublisherId)
+            {
+                return Forbid();
+            }
 
             try
             {
@@ -74,7 +80,8 @@ namespace StudyHub.Controllers
 
         // PUT api/courses/5
         // Update a course
-        [HttpPut("{courseId}")]
+        [HttpPut]
+        [Route("api/courses/{courseId}")]
         public IActionResult UpdateCourse(int courseId, CourseUpdateDto info)
         {
             var userId = Int32.Parse(User.FindFirst("userId").Value);
@@ -96,7 +103,8 @@ namespace StudyHub.Controllers
 
         // DELETE api/courses/5
         // Delete a course
-        [HttpDelete("{courseId}")]
+        [HttpDelete]
+        [Route("api/courses/{courseId}")]
         public IActionResult DeleteCourse(int courseId)
         {
             var userId = Int32.Parse(User.FindFirst("userId").Value);
@@ -112,21 +120,69 @@ namespace StudyHub.Controllers
             }
         }
 
-        [HttpGet("{courseId}/enrolls")]
-        public IActionResult GetEnrolledStudents(int courseId) 
-        {
-            var userId = Int32.Parse(User.FindFirst("userId").Value);
+        //[HttpGet("{courseId}/enrolls")]
+        //[Route("api/courses")]
+        //public IActionResult GetEnrolledStudents(int courseId) 
+        //{
+        //    var userId = Int32.Parse(User.FindFirst("userId").Value);
 
+        //    try
+        //    {
+        //        var students = courseManager.GetEnrolledStudents(courseId, userId);
+        //        return Ok(students);
+        //    }
+        //    catch (CustomDbException e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //}
+
+        [HttpGet]
+        [Route("api/admin/courses")]
+        [Authorize(Policy = "AdminOnly")]
+        public IActionResult AdminGetAllCourses()
+        {
+            var courses = courseManager.AdminGetAllCourses();
+            return Ok(courses);
+        }
+
+        [HttpGet]
+        [Route("api/admin/courses/{courseId}")]
+        [Authorize(Policy = "AdminOnly")]
+        public IActionResult AdminGetCourseById(int courseId)
+        {
+            var course = courseManager.AdminGetCourseById(courseId);
+            if(course == null)
+            {
+                return BadRequest("Course does not found.");
+            }
+            return Ok(course);
+        }
+
+        [HttpPost]
+        [Route("api/admin/courses")]
+        [Authorize(Policy = "AdminOnly")]
+        public IActionResult AdminRegisterCourse(CourseRegisterDto courseInfo)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             try
             {
-                var students = courseManager.GetEnrolledStudents(courseId, userId);
-                return Ok(students);
+                var course = courseManager.AdminRegisterCourse(courseInfo);
+                return Ok(course);
             }
-            catch (CustomDbException e)
+            catch(CustomDbException e)
             {
                 return BadRequest(e.Message);
             }
-        }
+            catch(UnauthorizedAccessException e)
+            {
+                return Forbid();
+            }
 
+
+        }
     }
 }

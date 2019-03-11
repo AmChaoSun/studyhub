@@ -11,6 +11,7 @@ namespace StudyHub.Models.Dtos
 
         public string Description { get; set; }
 
+        [Required]
         public int PublisherId { get; set; }
     }
 }
