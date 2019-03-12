@@ -6,7 +6,8 @@ namespace StudyHub.Managers.Interfaces
     public interface IUserManager
     {
         UserDisplayDto GetUserById(int id);
-        UserDisplayDto UpdateUser(int id, UserUpdateDto info);
+        UserDisplayDto UpdateUser(UserUpdateDto info);
         UserSearchResultDto GetUsers(UserSearchAttribute info);
+        void DeleteUser(int id);
     }
 }

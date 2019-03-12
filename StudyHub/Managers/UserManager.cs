@@ -20,6 +20,16 @@ namespace StudyHub.Managers
             this.mapper = mapper;
         }
 
+        public void DeleteUser(int id)
+        {
+            var user = userRepository.GetById(id);
+            if (user == null)
+            {
+                throw new CustomDbException("User not Found");
+            }
+            userRepository.Delete(user);
+        }
+
         public UserDisplayDto GetUserById(int id)
         {
             var user = userRepository.GetById(id);
@@ -61,16 +71,9 @@ namespace StudyHub.Managers
             return result;
         }
 
-        public UserDisplayDto UpdateUser(int id, UserUpdateDto info)
+        public UserDisplayDto UpdateUser(UserUpdateDto info)
         {
-            var user = userRepository.GetById(id);
-
-            if (user == null)
-            {
-                throw new CustomDbException("User not Found");
-            }
-
-            var updatedUser = userRepository.UpdateBasicInfo(user, info);
+            var user = userRepository.UpdateUser(info);
             //data transform
             var displayUser = mapper.Map<User, UserDisplayDto>(user);
             return displayUser;

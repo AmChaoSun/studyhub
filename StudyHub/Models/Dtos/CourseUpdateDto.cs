@@ -10,7 +10,7 @@ namespace StudyHub.Models.Dtos
         public string Name { get; set; }
 
         [Required]
-        public int courseId;
+        public int CourseId;
 
         [Required]
         public int PublisherId { get; set; }

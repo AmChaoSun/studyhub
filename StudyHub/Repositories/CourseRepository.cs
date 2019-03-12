@@ -85,7 +85,7 @@ namespace StudyHub.Repositories
 
             //check course to be updated exists
             var course = Records
-                .Where(x => x.CourseId == info.courseId && x.PublisherId == info.PublisherId)
+                .Where(x => x.CourseId == info.CourseId && x.PublisherId == info.PublisherId)
                 .FirstOrDefault();
             if (course == null)
             {

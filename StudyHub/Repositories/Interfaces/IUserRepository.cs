@@ -10,5 +10,6 @@ namespace StudyHub.Repositories.Interfaces
     {
         User UpdateBasicInfo(User user, UserUpdateDto info);
         IEnumerable<User> GetUsers(UserSearchAttribute info);
+        User UpdateUser(UserUpdateDto info);
     }
 }

@@ -167,7 +167,7 @@ namespace StudyHub.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if(courseId != info.courseId)
+            if(courseId != info.CourseId)
             {
                 return BadRequest("Unmatched course id.");
             }

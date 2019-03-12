@@ -37,5 +37,23 @@ namespace StudyHub.Repositories
             context.SaveChanges();
             return user;
         }
+
+        public User UpdateUser(UserUpdateDto info)
+        {
+            var user = Records
+                .Include(x => x.Role)
+                .FirstOrDefault(x => x.Id == info.Id);
+
+            if(user == null)
+            {
+                throw new CustomDbException("User not Found");
+            }
+
+            var entry = context.Entry(user);
+            entry.CurrentValues.SetValues(info);
+            entry.State = EntityState.Modified;
+            context.SaveChanges();
+            return user;
+        }
     }
 }

@@ -73,21 +73,20 @@ namespace StudyHub.Controllers
         {
             //authorization
             var userId = Int32.Parse(User.FindFirst("userId").Value);
-            if (!(userId == id))
+            if (userId != id)
             {
                 return Forbid();
             }
 
             try
             {
-                var user = userManager.UpdateUser(id, info);
+                var user = userManager.UpdateUser(info);
                 return Ok(user);
             }
             catch (CustomDbException e)
             {
                 return BadRequest(e.Message);
             }
-
         }
 
         [HttpGet]
@@ -131,6 +130,44 @@ namespace StudyHub.Controllers
             }
         }
 
-
+        [HttpDelete]
+        [Route("api/admin/users/{id}")]
+        [Authorize(Policy = "AdminOnly")]
+        public IActionResult AdminDeleteUser(int id)
+        {
+            try
+            {
+                userManager.DeleteUser(id);
+                return Ok();
+            }
+            catch (CustomDbException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+    
+        [HttpPut]
+        [Route("api/admin/users/{id}")]
+        [Authorize(Policy = "AdminOnly")]
+        public IActionResult AdminUpdateUser(int id, UserUpdateDto info)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if(id != info.Id)
+            {
+                return BadRequest("Id not match.");
+            }
+            try
+            {
+                var user = userManager.UpdateUser(info);
+                return Ok(user);
+            }
+            catch (CustomDbException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
