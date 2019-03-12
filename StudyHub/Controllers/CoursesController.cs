@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StudyHub.Managers;
 using StudyHub.Managers.Interfaces;
 using StudyHub.Models.Dtos;
 using StudyHub.Utils;
@@ -84,14 +80,21 @@ namespace StudyHub.Controllers
         [Route("api/courses/{courseId}")]
         public IActionResult UpdateCourse(int courseId, CourseUpdateDto info)
         {
-            var userId = Int32.Parse(User.FindFirst("userId").Value);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            //assign publisherId
-            info.PublisherId = userId;
+            //authentication
+            var userId = Int32.Parse(User.FindFirst("userId").Value);
+            if(info.PublisherId != userId)
+            {
+                return Forbid();
+            }
 
             try
             {
-                var course = courseManager.UpdateCourse(courseId, info);
+                var course = courseManager.UpdateCourse(info);
                 return Ok(course);
             }
             catch (CustomDbException e)
@@ -177,12 +180,55 @@ namespace StudyHub.Controllers
             {
                 return BadRequest(e.Message);
             }
-            catch(UnauthorizedAccessException e)
+            catch(UnauthorizedAccessException)
             {
                 return Forbid();
             }
-
-
         }
+
+        [HttpPut]
+        [Route("api/admin/courses/{courseId}")]
+        [Authorize(Policy = "AdminOnly")]
+        public IActionResult AdminUpdateCourse(int courseId, CourseUpdateDto info)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if(courseId != info.courseId)
+            {
+                return BadRequest("Unmatched course id.");
+            }
+            try
+            {
+                var course = courseManager.UpdateCourse(info);
+                return Ok(course);
+            }
+            catch (CustomDbException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+        }
+
+        [HttpDelete]
+        [Route("api/admin/courses/{courseId}")]
+        [Authorize(Policy = "AdminOnly")]
+        public IActionResult AdminDeleteCourse(int courseId)
+        {
+            try
+            {
+                courseManager.AdminDeleteCourse(courseId);
+                return Ok();
+            }
+            catch (CustomDbException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
     }
 }

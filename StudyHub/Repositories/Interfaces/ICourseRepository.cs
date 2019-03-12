@@ -7,9 +7,10 @@ namespace StudyHub.Repositories.Interfaces
 {
     public interface ICourseRepository : IGenericRepository<Course>
     {
-        Course UpdateBasicInfo(Course course, CourseUpdateDto info);
         IEnumerable<User> GetEnrolledStudents(Course course);
         Course AdminGetCourseById(int courseId);
-        Course RegisterCourse(CourseRegisterDto info);
+        Course RegisterCourse(Course course);
+        Course UpdateCourse(CourseUpdateDto info);
+        void AdminDeleteCourse(int courseId);
     }
 }

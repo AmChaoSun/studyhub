@@ -65,7 +65,17 @@ namespace StudyHub.Managers
         public CourseDisplayDto AdminRegisterCourse(CourseRegisterDto courseInfo)
         {
             var course = mapper.Map<CourseRegisterDto, Course>(courseInfo);
-            course  = courseRepository.Add(course);
+
+            //register course
+            course  = courseRepository.RegisterCourse(course);
+
+            var displayCourse = mapper.Map<Course, CourseDisplayDto>(course);
+            return displayCourse;
+        }
+
+        public CourseDisplayDto UpdateCourse(CourseUpdateDto info)
+        {
+            var course = courseRepository.UpdateCourse(info);
             var displayCourse = mapper.Map<Course, CourseDisplayDto>(course);
             return displayCourse;
         }
@@ -74,7 +84,7 @@ namespace StudyHub.Managers
         {
             var newCourse = mapper.Map<CourseRegisterDto, Course>(course);
 
-            newCourse = courseRepository.Add(newCourse);
+            newCourse = courseRepository.RegisterCourse(newCourse);
 
             var displayCourse = mapper.Map<Course, CourseDisplayDto>(newCourse);
             return displayCourse;
@@ -120,19 +130,9 @@ namespace StudyHub.Managers
 
         }
 
-        public CourseDisplayDto UpdateCourse(int courseId, CourseUpdateDto info)
+        public void AdminDeleteCourse(int courseId)
         {
-            var course = courseRepository.Records
-                .Where(x => x.CourseId == courseId && x.PublisherId == info.PublisherId)
-                .FirstOrDefault();
-            if (course == null)
-            {
-                throw new CustomDbException("Invalid request");
-            }
-
-            course = courseRepository.UpdateBasicInfo(course, info);
-            var displayCourse = mapper.Map<Course, CourseDisplayDto>(course);
-            return displayCourse;
+            courseRepository.AdminDeleteCourse(courseId);
         }
     }
 }
