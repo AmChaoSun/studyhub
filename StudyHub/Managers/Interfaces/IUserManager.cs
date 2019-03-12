@@ -7,5 +7,6 @@ namespace StudyHub.Managers.Interfaces
     {
         UserDisplayDto GetUserById(int id);
         UserDisplayDto UpdateUser(int id, UserUpdateDto info);
+        UserSearchResultDto GetUsers(UserSearchAttribute info);
     }
 }

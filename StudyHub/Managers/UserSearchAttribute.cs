@@ -1,5 +1,5 @@
 ﻿using System;
-namespace StudyHub.Models.Dtos
+namespace StudyHub.Managers
 {
     public class UserSearchAttribute
     {

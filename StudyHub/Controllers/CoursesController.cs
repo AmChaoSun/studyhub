@@ -20,8 +20,6 @@ namespace StudyHub.Controllers
             this.courseManager = courseManager;
         }
 
-        // GET: api/courses
-        // Get courses list(search)
         [HttpGet]
         [Route("api/courses")]
         [AllowAnonymous]
@@ -29,9 +27,6 @@ namespace StudyHub.Controllers
         {
             return Ok();
         }
-
-        // GET api/courses/5
-        // Get course by id
 
         [HttpGet]
         [Route("api/courses/{courseId}")]
@@ -48,9 +43,7 @@ namespace StudyHub.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-        // POST api/courses
-        // Post a course
+        
         [HttpPost]
         [Route("api/courses")]
         public IActionResult CreateCourse(CourseRegisterDto course)
@@ -73,9 +66,7 @@ namespace StudyHub.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-        // PUT api/courses/5
-        // Update a course
+        
         [HttpPut]
         [Route("api/courses/{courseId}")]
         public IActionResult UpdateCourse(int courseId, CourseUpdateDto info)
@@ -103,9 +94,7 @@ namespace StudyHub.Controllers
             }
 
         }
-
-        // DELETE api/courses/5
-        // Delete a course
+        
         [HttpDelete]
         [Route("api/courses/{courseId}")]
         public IActionResult DeleteCourse(int courseId)
@@ -122,23 +111,6 @@ namespace StudyHub.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-        //[HttpGet("{courseId}/enrolls")]
-        //[Route("api/courses")]
-        //public IActionResult GetEnrolledStudents(int courseId) 
-        //{
-        //    var userId = Int32.Parse(User.FindFirst("userId").Value);
-
-        //    try
-        //    {
-        //        var students = courseManager.GetEnrolledStudents(courseId, userId);
-        //        return Ok(students);
-        //    }
-        //    catch (CustomDbException e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
 
         [HttpGet]
         [Route("api/admin/courses")]
