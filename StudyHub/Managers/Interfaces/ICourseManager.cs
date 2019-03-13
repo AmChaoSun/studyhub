@@ -10,7 +10,7 @@ namespace StudyHub.Managers.Interfaces
         CourseDisplayDto GetCourseById(int courseId);
         CourseDisplayDto CreateCourse(CourseRegisterDto course);
         void DeleteCourse(int coureId, int userId);
-        IEnumerable<UserDisplayDto> GetEnrolledStudents(int courseId, int userId);
+        IEnumerable<UserDisplayDto> GetEnrolledStudents(int courseId);
         IEnumerable<CourseDisplayDto> AdminGetAllCourses();
         CourseDisplayDto AdminGetCourseById(int courseId);
         CourseDisplayDto AdminRegisterCourse(CourseRegisterDto courseInfo);

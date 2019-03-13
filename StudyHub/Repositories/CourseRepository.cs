@@ -38,15 +38,22 @@ namespace StudyHub.Repositories
             return course;
         }
 
-        public IEnumerable<User> GetEnrolledStudents(Course course)
+        public IEnumerable<User> GetEnrolledStudents(int courseId)
         {
+            var course = Records
+                .Include(x => x.Enrolls)
+                    .ThenInclude(x => x.User)
+                        .ThenInclude(x => x.Role)
+                .FirstOrDefault(x => x.CourseId == courseId);
+            if(course == null)
+            {
+                throw new CustomDbException("Course not found.");
+            }
             var students = course.Enrolls
-                .Join(context.Users,
-                            e => e.UserId,
-                            u => u.Id,
-                            (e, u) => u);
-                //.ToList();
+                .Select(x => x.User);
+
             return students;
+
         }
 
         public Course RegisterCourse(Course course)

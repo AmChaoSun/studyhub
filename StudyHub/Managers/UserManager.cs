@@ -30,6 +30,16 @@ namespace StudyHub.Managers
             userRepository.Delete(user);
         }
 
+        public IEnumerable<CourseDisplayDto> GetEnrolledCourses(int studentId)
+        {
+            var courses = userRepository.GetEnrolledCourses(studentId);
+
+            var displayCourses = mapper
+                .Map<IEnumerable<Course>, 
+                    IEnumerable<CourseDisplayDto>>(courses);
+            return displayCourses;
+        }
+
         public UserDisplayDto GetUserById(int id)
         {
             var user = userRepository.GetById(id);
@@ -69,6 +79,16 @@ namespace StudyHub.Managers
                 .Map<IEnumerable<User>, IEnumerable<UserDisplayDto>>(users);
 
             return result;
+        }
+
+        public void StudentEnrollCourse(int studentId, int courseId)
+        {
+            userRepository.StudentEnrollCourse(studentId, courseId);
+        }
+
+        public void StudentUnenrollCourse(int studentId, int courseId)
+        {
+            userRepository.StudentUnenrollCourse(studentId, courseId);
         }
 
         public UserDisplayDto UpdateUser(UserUpdateDto info)

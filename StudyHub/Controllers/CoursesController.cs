@@ -202,5 +202,22 @@ namespace StudyHub.Controllers
             }
         }
 
+        //GET api/admin/enrolls/courses/id
+        //get enrolled students for course id
+        [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
+        [Route("api/admin/enrolls/courses/{courseId}")]
+        public IActionResult GetEnrolledStudents(int courseId)
+        {
+            try
+            {
+                var students = courseManager.GetEnrolledStudents(courseId);
+                return Ok(students);
+            }
+            catch (CustomDbException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

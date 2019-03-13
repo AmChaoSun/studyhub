@@ -68,6 +68,7 @@ namespace StudyHub.Controllers
         }
 
         // PUT api/users/5
+        [HttpPut]
         [Route("api/[controller]/{id}")]
         public IActionResult UpdateUser(int id, UserUpdateDto info)
         {
@@ -163,6 +164,74 @@ namespace StudyHub.Controllers
             {
                 var user = userManager.UpdateUser(info);
                 return Ok(user);
+            }
+            catch (CustomDbException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("api/admin/lecturers/{id}")]
+        [Authorize(Policy = "AdminOnly")]
+        public IActionResult AdminGetLectureById(int id)
+        {
+            try
+            {
+                var user = userManager.GetUserById(id);
+                return Ok(user);
+            }
+            catch (CustomDbException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
+        [Route("api/admin/enrolls/students/{studentId}")]
+        public IActionResult GetEnrolledCourses(int studentId)
+        {
+            try
+            {
+                var courses = userManager.GetEnrolledCourses(studentId);
+                return Ok(courses);
+            }
+            catch (CustomDbException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
+        [Route("api/admin/enrolls")]
+        public IActionResult AdminEnrollStudent(AdminEnrollInfo info)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                userManager.StudentEnrollCourse(info.StudentId, info.CourseId);
+                return Ok();
+            }
+            catch (CustomDbException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Authorize(Policy = "AdminOnly")]
+        [Route("api/admin/enrolls/student{studentId}/course{courseId}")]
+        public IActionResult AdminUnenrollStudent(int studentId, int courseId)
+        {
+            try
+            {
+                userManager.StudentUnenrollCourse(studentId, courseId);
+                return Ok();
             }
             catch (CustomDbException e)
             {

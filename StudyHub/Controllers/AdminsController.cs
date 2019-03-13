@@ -87,19 +87,6 @@ namespace StudyHub.Controllers
             {
                 return BadRequest(e.Message);
             }
-
         }
-
-        //[HttpPut("users/{id}")]
-        //public IActionResult UpdateUser()
-        //{
-
-        //}
-
-        //[HttpDelete("users/{id}")]
-        //public IActionResult DeleteUser()
-        //{
-
-        //}
     }
 }

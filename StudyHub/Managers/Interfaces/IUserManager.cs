@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using StudyHub.Models.Dtos;
 
 namespace StudyHub.Managers.Interfaces
@@ -9,5 +10,8 @@ namespace StudyHub.Managers.Interfaces
         UserDisplayDto UpdateUser(UserUpdateDto info);
         UserSearchResultDto GetUsers(UserSearchAttribute info);
         void DeleteUser(int id);
+        IEnumerable<CourseDisplayDto> GetEnrolledCourses(int studentId);
+        void StudentEnrollCourse(int studentId, int courseId);
+        void StudentUnenrollCourse(int studentId, int courseId);
     }
 }

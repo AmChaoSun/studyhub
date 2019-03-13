@@ -17,6 +17,19 @@ namespace StudyHub.Repositories
 
         }
 
+        public IEnumerable<Course> GetEnrolledCourses(int studentId)
+        {
+            var student = Records
+                .Include(x => x.Courses)
+                    .ThenInclude(x => x.Publisher)
+                .FirstOrDefault(x => x.Id == studentId);
+            if(student == null)
+            {
+                throw new CustomDbException("Student not found.");
+            }
+            return student.Courses;
+        }
+
         public IEnumerable<User> GetUsers(UserSearchAttribute info)
         {
             var users = Records.Include(x => x.Role)
@@ -27,6 +40,43 @@ namespace StudyHub.Repositories
                 users = users.Where(x => x.Role.Name == info.Role);
             }
             return users;
+        }
+
+        public void StudentEnrollCourse(int studentId, int courseId)
+        {
+            if(context.Enrolls
+                .Any(x => x.CourseId == courseId && x.UserId == studentId))
+            {
+                throw new CustomDbException("Already enrolled.");
+            }
+            if(!context.Courses.Any(x => x.CourseId == courseId))
+            {
+                throw new CustomDbException("Course not found.");
+            }
+            if(!Records.Any(x => x.Id == studentId))
+            {
+                throw new CustomDbException("Student not found.");
+            }
+
+            context.Enrolls.Add(new Enroll
+            {
+                UserId = studentId,
+                CourseId = courseId
+            });
+            context.SaveChanges();
+        }
+
+        public void StudentUnenrollCourse(int studentId, int courseId)
+        {
+            var enroll = context.Enrolls
+                .Where(x => x.CourseId == courseId && x.UserId == studentId)
+                .FirstOrDefault();
+            if (enroll == null)
+            {
+                throw new CustomDbException("Enroll record not found.");
+            }
+            context.Remove(enroll);
+            context.SaveChanges();
         }
 
         public User UpdateBasicInfo(User user, UserUpdateDto info)
@@ -55,5 +105,6 @@ namespace StudyHub.Repositories
             context.SaveChanges();
             return user;
         }
+
     }
 }

@@ -114,16 +114,9 @@ namespace StudyHub.Managers
             return displayCourse;
         }
 
-        public IEnumerable<UserDisplayDto> GetEnrolledStudents(int courseId, int userId)
+        public IEnumerable<UserDisplayDto> GetEnrolledStudents(int courseId)
         {
-            var course = courseRepository.Records
-                .Where(x => x.CourseId == courseId && x.PublisherId == userId)
-                .FirstOrDefault();
-            if (course == null)
-            {
-                throw new CustomDbException("Invalid request");
-            }
-            var students = courseRepository.GetEnrolledStudents(course);
+            var students = courseRepository.GetEnrolledStudents(courseId);
             var displayStudents = mapper.Map<IEnumerable<User>,
                                     IEnumerable<UserDisplayDto>>(students);
             return displayStudents;

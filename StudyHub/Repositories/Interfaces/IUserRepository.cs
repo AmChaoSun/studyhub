@@ -11,5 +11,8 @@ namespace StudyHub.Repositories.Interfaces
         User UpdateBasicInfo(User user, UserUpdateDto info);
         IEnumerable<User> GetUsers(UserSearchAttribute info);
         User UpdateUser(UserUpdateDto info);
+        IEnumerable<Course> GetEnrolledCourses(int studentId);
+        void StudentEnrollCourse(int studentId, int courseId);
+        void StudentUnenrollCourse(int studentId, int courseId);
     }
 }
