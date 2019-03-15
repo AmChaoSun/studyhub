@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -41,7 +42,9 @@ namespace StudyHub
             services.AddScoped<ICourseManager, CourseManager>();
             services.AddScoped<IAdminManager, AdminManager>();
             services.AddScoped<IAdminRepository, AdminRepository>();
-            services.AddScoped<StudyHubContext, StudyHubContext>();
+            //services.AddScoped<StudyHubContext, StudyHubContext>();
+            services.AddDbContext<StudyHubContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("AWSDatabase")));
 
             //automapper config
             var mapConfig = new AutoMapper.MapperConfiguration(cfg =>

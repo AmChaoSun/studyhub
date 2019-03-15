@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
+using StudyHub.Utils;
 
 namespace StudyHub.Models
 {
@@ -15,6 +17,7 @@ namespace StudyHub.Models
         {
         }
 
+
         public virtual DbSet<AdminRole> AdminRoles { get; set; }
         public virtual DbSet<AdminUser> AdminUsers { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
@@ -27,8 +30,9 @@ namespace StudyHub.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseNpgsql("Host=localhost;Database=StudyHub;");
+
+                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                //optionsBuilder.UseNpgsql("Host=localhost;Database=StudyHub;");
             }
         }
 
