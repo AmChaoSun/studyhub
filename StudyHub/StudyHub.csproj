@@ -21,5 +21,6 @@
     <Folder Include="Repositories\Interfaces\" />
     <Folder Include="Managers\Interfaces\" />
     <Folder Include="Models\Dtos\" />
+    <Folder Include="Authorizations\" />
   </ItemGroup>
 </Project>

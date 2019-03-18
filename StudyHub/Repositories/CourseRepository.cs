@@ -62,6 +62,7 @@ namespace StudyHub.Repositories
                 .Include(x => x.Role)
                 .Where(x => x.Id == course.PublisherId)
                 .FirstOrDefault();
+            //check user has auth to publish or not 
             if (!CanPublish(user))
             {
                 throw new UnauthorizedAccessException();

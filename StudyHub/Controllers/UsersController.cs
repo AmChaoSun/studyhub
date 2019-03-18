@@ -45,7 +45,6 @@ namespace StudyHub.Controllers
             {
                 return BadRequest(e.Message);
             }
-
         }
 
         [HttpGet]
@@ -77,6 +76,11 @@ namespace StudyHub.Controllers
             if (userId != id)
             {
                 return Forbid();
+            }
+            //info id validation
+            if (id != info.Id)
+            {
+                return BadRequest("Id not match.");
             }
 
             try

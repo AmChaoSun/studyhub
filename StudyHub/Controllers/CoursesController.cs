@@ -20,13 +20,13 @@ namespace StudyHub.Controllers
             this.courseManager = courseManager;
         }
 
-        [HttpGet]
-        [Route("api/courses")]
-        [AllowAnonymous]
-        public IActionResult GetCourses()
-        {
-            return Ok();
-        }
+        //[HttpGet]
+        //[Route("api/courses")]
+        //[AllowAnonymous]
+        //public IActionResult GetCourses()
+        //{
+        //    return Ok();
+        //}
 
         [HttpGet]
         [Route("api/courses/{courseId}")]
@@ -50,7 +50,7 @@ namespace StudyHub.Controllers
         {
             var userId = Int32.Parse(User.FindFirst("userId").Value);
 
-            //assign publisherId
+            //validate publisherId
             if(userId != course.PublisherId)
             {
                 return Forbid();
@@ -167,6 +167,7 @@ namespace StudyHub.Controllers
             {
                 return BadRequest(ModelState);
             }
+            //check id
             if(courseId != info.CourseId)
             {
                 return BadRequest("Unmatched course id.");
