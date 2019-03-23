@@ -38,6 +38,8 @@ namespace StudyHub
             //interfaces DIs
             services.AddScoped<IAuthManager, AuthManager>();
             services.AddScoped<IUserAuthRepository, AuthRepository>();
+            services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<ICourseManager, CourseManager>();
             services.AddScoped<IAdminManager, AdminManager>();
