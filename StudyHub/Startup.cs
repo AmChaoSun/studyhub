@@ -78,6 +78,8 @@ namespace StudyHub
                 options.AddPolicy("AdminOnly", policy => policy.RequireClaim("AdminId"));
             });
 
+            //add cors
+            services.AddCors();
 
             //mvc middleware
             services.AddMvc()
@@ -120,6 +122,12 @@ namespace StudyHub
             });
 
             app.UseHttpsRedirection();
+
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
             app.UseMvc();
         }
     }
