@@ -30,6 +30,14 @@ namespace StudyHub.Managers
             userRepository.Delete(user);
         }
 
+        public UserDisplayDto EditUser(UserEditDto info)
+        {
+            var user = userRepository.EditUser(info);
+            //data transform
+            var displayUser = mapper.Map<User, UserDisplayDto>(user);
+            return displayUser;
+        }
+
         public IEnumerable<CourseDisplayDto> GetEnrolledCourses(int studentId)
         {
             var courses = userRepository.GetEnrolledCourses(studentId);
@@ -38,6 +46,11 @@ namespace StudyHub.Managers
                 .Map<IEnumerable<Course>, 
                     IEnumerable<CourseDisplayDto>>(courses);
             return displayCourses;
+        }
+
+        public IEnumerable<string> GetRoles()
+        {
+            return userRepository.GetRoles();
         }
 
         public UserDisplayDto GetUserById(int id)

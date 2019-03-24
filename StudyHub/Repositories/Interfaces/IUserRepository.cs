@@ -14,5 +14,7 @@ namespace StudyHub.Repositories.Interfaces
         IEnumerable<Course> GetEnrolledCourses(int studentId);
         void StudentEnrollCourse(int studentId, int courseId);
         void StudentUnenrollCourse(int studentId, int courseId);
+        User EditUser(UserEditDto info);
+        IEnumerable<string> GetRoles();
     }
 }

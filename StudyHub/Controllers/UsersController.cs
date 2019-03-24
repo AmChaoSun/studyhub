@@ -163,7 +163,7 @@ namespace StudyHub.Controllers
         [HttpPut]
         [Route("api/admin/users/{id}")]
         [Authorize(Policy = "AdminOnly")]
-        public IActionResult AdminUpdateUser(int id, UserUpdateDto info)
+        public IActionResult AdminUpdateUser(int id, UserEditDto info)
         {
             if (!ModelState.IsValid)
             {
@@ -175,13 +175,20 @@ namespace StudyHub.Controllers
             }
             try
             {
-                var user = userManager.UpdateUser(info);
+                var user = userManager.EditUser(info);
                 return Ok(user);
             }
             catch (CustomDbException e)
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        [HttpGet]
+        [Route("api/admin/users/roles")]
+        public IActionResult GetAllUserRoles()
+        {
+            return Ok(userManager.GetRoles());
         }
 
         [HttpGet]

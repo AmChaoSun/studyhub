@@ -13,5 +13,7 @@ namespace StudyHub.Managers.Interfaces
         IEnumerable<CourseDisplayDto> GetEnrolledCourses(int studentId);
         void StudentEnrollCourse(int studentId, int courseId);
         void StudentUnenrollCourse(int studentId, int courseId);
+        UserDisplayDto EditUser(UserEditDto info);
+        IEnumerable<string> GetRoles();
     }
 }

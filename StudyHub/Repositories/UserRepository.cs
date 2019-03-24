@@ -17,6 +17,40 @@ namespace StudyHub.Repositories
 
         }
 
+        public User EditUser(UserEditDto info)
+        {
+            var role = context.UserRoles
+                .Where(x => x.Name == info.Role)
+                .FirstOrDefault();
+
+            if(role == null)
+            {
+                throw new CustomDbException("Invalid role value");
+            }
+
+            var user = Records
+                .Include(x => x.Role)
+                .FirstOrDefault(x => x.Id == info.Id);
+
+            if (user == null)
+            {
+                throw new CustomDbException("User not Found");
+            }
+
+            var entry = context.Entry(user);
+            entry.CurrentValues.SetValues(new { 
+                info.NickName,
+                info.Mobile,
+                info.IsActive,
+                info.Email,
+                role.RoleId,
+                Role = role
+            });
+            entry.State = EntityState.Modified;
+            context.SaveChanges();
+            return user;
+        }
+
         public IEnumerable<Course> GetEnrolledCourses(int studentId)
         {
             var student = Records
@@ -28,6 +62,12 @@ namespace StudyHub.Repositories
                 throw new CustomDbException("Student not found.");
             }
             return student.Courses;
+        }
+
+        public IEnumerable<string> GetRoles()
+        {
+            return context.UserRoles
+                .Select(x => x.Name);
         }
 
         public IEnumerable<User> GetUsers(UserSearchAttribute info)
@@ -105,6 +145,8 @@ namespace StudyHub.Repositories
             context.SaveChanges();
             return user;
         }
+
+
 
     }
 }
