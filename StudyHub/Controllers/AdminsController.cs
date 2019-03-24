@@ -47,6 +47,25 @@ namespace StudyHub.Controllers
             }
         }
 
+        [HttpGet("profile")]
+        [Authorize(Policy = "AdminOnly")]
+        public IActionResult GetProfile()
+        {
+            if(!Int32.TryParse(User.FindFirst("adminId").Value, out int adminId))
+            {
+                return Unauthorized();
+            }
+            try
+            {
+                var adminUser = adminManager.GetProfile(adminId);
+                return Ok(adminUser);
+            }
+            catch(CustomDbException)
+            {
+                return Unauthorized();
+            }
+        }
+
         [HttpGet("users")]
         public IActionResult SearchUsers(string sortString = "id",
                                         string sortOrder = "ascend",

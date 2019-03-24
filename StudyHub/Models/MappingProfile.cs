@@ -8,6 +8,11 @@ namespace StudyHub.Models
     {
         public MappingProfile()
         {
+            //admin
+            CreateMap<AdminUser, AdminDisplayDto>()
+                .ForMember(d => d.Role,
+                    o => o.MapFrom(src => src.Role.Name));
+
             //user
             CreateMap<User, UserDisplayDto>()
                 .ForMember(d => d.Role,

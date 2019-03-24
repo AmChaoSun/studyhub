@@ -32,7 +32,7 @@ namespace StudyHub.Controllers
             //authorization
             if (!Int32.TryParse(User.FindFirst("userId").Value, out int userId))
             {
-                return Forbid();
+                return Unauthorized();
             };
             if (!(userId == id))
             {
@@ -57,7 +57,7 @@ namespace StudyHub.Controllers
             //authorization
             if (!Int32.TryParse(User.FindFirst("userId").Value, out int userId))
             {
-                return Forbid();
+                return Unauthorized();
             };
 
             try
@@ -80,7 +80,7 @@ namespace StudyHub.Controllers
             //authorization
             if (!Int32.TryParse(User.FindFirst("userId").Value, out int userId))
             {
-                return Forbid();
+                return Unauthorized();
             };
             if (userId != id)
             {

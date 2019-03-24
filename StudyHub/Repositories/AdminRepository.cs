@@ -24,6 +24,14 @@ namespace StudyHub.Repositories
                 .FirstOrDefault();
         }
 
+        public AdminUser GetAdminById(int adminId)
+        {
+            return Records
+                .Include(x => x.Role)
+                .Where(x => x.AdminId == adminId)
+                .FirstOrDefault();
+        }
+
         public User RegisterUser(UserRegisterDto info)
         {
             //check NickName existed or not

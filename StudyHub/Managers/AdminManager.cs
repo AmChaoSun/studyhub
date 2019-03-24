@@ -110,5 +110,16 @@ namespace StudyHub.Managers.Interfaces
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public AdminDisplayDto GetProfile(int adminId)
+        {
+            var admin = repo.GetAdminById(adminId);
+            if(admin == null)
+            {
+                throw new CustomDbException("Admin user does not exist.");
+            }
+            var displayAdmin = mapper.Map<AdminUser, AdminDisplayDto>(admin);
+            return displayAdmin;
+        }
     }
 }
