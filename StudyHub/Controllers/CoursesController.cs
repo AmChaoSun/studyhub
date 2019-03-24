@@ -48,10 +48,14 @@ namespace StudyHub.Controllers
         [Route("api/courses")]
         public IActionResult CreateCourse(CourseRegisterDto course)
         {
-            var userId = Int32.Parse(User.FindFirst("userId").Value);
+            //authentication
+            if (!Int32.TryParse(User.FindFirst("userId").Value, out int userId))
+            {
+                return Forbid();
+            };
 
             //validate publisherId
-            if(userId != course.PublisherId)
+            if (userId != course.PublisherId)
             {
                 return Forbid();
             }
@@ -77,8 +81,11 @@ namespace StudyHub.Controllers
             }
 
             //authentication
-            var userId = Int32.Parse(User.FindFirst("userId").Value);
-            if(info.PublisherId != userId)
+            if (!Int32.TryParse(User.FindFirst("userId").Value, out int userId))
+            {
+                return Forbid();
+            };
+            if (info.PublisherId != userId)
             {
                 return Forbid();
             }
@@ -99,7 +106,11 @@ namespace StudyHub.Controllers
         [Route("api/courses/{courseId}")]
         public IActionResult DeleteCourse(int courseId)
         {
-            var userId = Int32.Parse(User.FindFirst("userId").Value);
+            //authentication
+            if (!Int32.TryParse(User.FindFirst("userId").Value, out int userId))
+            {
+                return Forbid();
+            };
 
             try
             {

@@ -30,7 +30,10 @@ namespace StudyHub.Controllers
         public IActionResult GetUser(int id)
         {
             //authorization
-            var userId = Int32.Parse(User.FindFirst("userId").Value);
+            if (!Int32.TryParse(User.FindFirst("userId").Value, out int userId))
+            {
+                return Forbid();
+            };
             if (!(userId == id))
             {
                 return Forbid();
@@ -52,7 +55,10 @@ namespace StudyHub.Controllers
         public IActionResult GetProfile()
         {
             //authorization
-            var userId = Int32.Parse(User.FindFirst("userId").Value);
+            if (!Int32.TryParse(User.FindFirst("userId").Value, out int userId))
+            {
+                return Forbid();
+            };
 
             try
             {
@@ -72,7 +78,10 @@ namespace StudyHub.Controllers
         public IActionResult UpdateUser(int id, UserUpdateDto info)
         {
             //authorization
-            var userId = Int32.Parse(User.FindFirst("userId").Value);
+            if (!Int32.TryParse(User.FindFirst("userId").Value, out int userId))
+            {
+                return Forbid();
+            };
             if (userId != id)
             {
                 return Forbid();
