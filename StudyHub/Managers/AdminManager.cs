@@ -31,7 +31,16 @@ namespace StudyHub.Managers.Interfaces
 
         public UserDisplayDto RegisterUser(UserRegisterDto info)
         {
-            var user = repo.RegisterUser(info);
+
+            var auth = new UserLoginAuth
+            {
+                IdentityType = "username",
+                Identifier = info.NickName,
+                Credential = new HashHelper(configuration).GetHashedData(info.Credential),
+                InSite = true,
+                IsVerified = true
+            };
+            var user = repo.RegisterUser(info, auth);
             var displayUser = mapper.Map<User, UserDisplayDto>(user);
             return displayUser;
         }

@@ -15,13 +15,13 @@ namespace StudyHub.Models.Dtos
         [Required]
         public string Role { get; set; }
 
-        [Required]
-        [StringLength(50, ErrorMessage = "The {0} length must not exceed {1}.")]
-        public string IdentityType { get; set; }
+        //[Required]
+        //[StringLength(50, ErrorMessage = "The {0} length must not exceed {1}.")]
+        //public string IdentityType { get; set; }
 
-        [Required]
-        [StringLength(200, ErrorMessage = "The {0} length must not exceed {1}.")]
-        public string Identifier { get; set; }
+        //[Required]
+        //[StringLength(200, ErrorMessage = "The {0} length must not exceed {1}.")]
+        //public string Identifier { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

@@ -32,7 +32,7 @@ namespace StudyHub.Repositories
                 .FirstOrDefault();
         }
 
-        public User RegisterUser(UserRegisterDto info)
+        public User RegisterUser(UserRegisterDto info, UserLoginAuth loginInfo)
         {
             //check NickName existed or not
             if(context.Users.Any(x => x.NickName == info.NickName))
@@ -42,8 +42,7 @@ namespace StudyHub.Repositories
 
             //check loginAuth existed or not
             if(context.UserLoginAuths
-                .Any(x => x.IdentityType == info.IdentityType
-                    && x.Identifier == info.Identifier))
+                .Any(x => x.Identifier == loginInfo.Identifier))
             {
                 throw new CustomDbException("Identifier existed.");
             }
@@ -72,17 +71,9 @@ namespace StudyHub.Repositories
             context.SaveChanges();
 
             //create loginAuth
-            var userLoginAuth = new UserLoginAuth
-            {
-                Identifier = info.Identifier,
-                IdentityType = info.IdentityType,
-                Credential = info.Credential,
-                InSite = true,
-                IsVerified = true,
-                UserId = user.Id
-            };
+            loginInfo.UserId = user.Id;
             //save loginAuth
-            context.UserLoginAuths.Add(userLoginAuth);
+            context.UserLoginAuths.Add(loginInfo);
             context.SaveChanges();
 
             return user;
