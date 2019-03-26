@@ -17,6 +17,12 @@ namespace StudyHub.Repositories
 
         }
 
+        public override User GetById(int id)
+        {
+            return Records
+                .Include(x => x.Role)
+                .FirstOrDefault(x => x.Id == id);
+        }
         public User EditUser(UserEditDto info)
         {
             var role = context.UserRoles
