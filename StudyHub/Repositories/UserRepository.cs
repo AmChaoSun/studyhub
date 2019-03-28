@@ -59,15 +59,16 @@ namespace StudyHub.Repositories
 
         public IEnumerable<Course> GetEnrolledCourses(int studentId)
         {
-            var student = Records
-                .Include(x => x.Courses)
-                    .ThenInclude(x => x.Publisher)
-                .FirstOrDefault(x => x.Id == studentId);
-            if(student == null)
+            if (Records.Find(studentId) == null)
             {
                 throw new CustomDbException("Student not found.");
             }
-            return student.Courses;
+            var courses = context.Enrolls
+                .Where(x => x.UserId == studentId)
+                .Include(x => x.Course)
+                    .ThenInclude(x => x.Publisher)
+                .Select(x => x.Course);
+            return courses;
         }
 
         public IEnumerable<string> GetRoles()
