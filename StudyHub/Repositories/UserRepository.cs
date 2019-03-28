@@ -66,8 +66,8 @@ namespace StudyHub.Repositories
             var courses = context.Enrolls
                 .Where(x => x.UserId == studentId)
                 .Include(x => x.Course)
-                    .ThenInclude(x => x.Publisher)
-                .Select(x => x.Course);
+                .Select(x => x.Course)
+                    .Include(x => x.Publisher);
             return courses;
         }
 
