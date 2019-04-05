@@ -25,6 +25,13 @@ namespace StudyHub.Repositories
         }
         public User EditUser(UserEditDto info)
         {
+            //check username
+            if (Records
+                .Any(x => x.Id != info.Id && x.NickName == info.NickName))
+            {
+                throw new CustomDbException("user name existed");
+            }
+
             var role = context.UserRoles
                 .Where(x => x.Name == info.Role)
                 .FirstOrDefault();

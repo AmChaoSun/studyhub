@@ -93,7 +93,8 @@ namespace StudyHub.Repositories
 
             //check course to be updated exists
             var course = Records
-                .Where(x => x.CourseId == info.CourseId && x.PublisherId == info.PublisherId)
+                .Where(x => x.CourseId == info.CourseId 
+                    && x.PublisherId == info.PublisherId)
                 .FirstOrDefault();
             if (course == null)
             {
@@ -101,7 +102,8 @@ namespace StudyHub.Repositories
             }
 
             //check values
-            if (Records.Any(x => x.Name == info.Name))
+            if (Records
+                .Any(x => x.CourseId != info.CourseId && x.Name == info.Name))
             {
                 throw new CustomDbException("course name existed");
             }
